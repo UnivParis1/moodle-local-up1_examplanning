@@ -30,8 +30,14 @@ if ( is_siteadmin()) {
 	
 	$formdata = $mform->get_data();
 	if ($formdata){
-		$resultAssign = getAssignResult($formdata, $params);
-		$resultQuiz = getQuizResult($formdata, $params);
+        $resultQuiz = getQuizResult($formdata, $params);
+        by_time_addQuiz($resultQuiz);
+        $resultAssign = getAssignResult($formdata, $params);
+        by_time_addAssign($resultAssign);
+        by_time_display();
+	foreach ($resultAssign as $e) { unset($e->cm_id); }
+	foreach ($resultQuiz as $e) { unset($e->cm_id); }
+
 		switch ($formdata->choice) {
 			case 'assign':
 				$table = new html_table();
