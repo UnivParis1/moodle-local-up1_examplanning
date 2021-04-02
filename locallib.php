@@ -155,7 +155,7 @@ function by_time_may_add($dt, $cat, $link, $r, $ratio) {
     global $by_time;
     if (!isset($by_time[$dt])) $by_time[$dt] = [ 'courses' => [], 'l' => [] ];
     $e = &$by_time[$dt];
-    $nbKinds = ['nbEtudiantsDansGroups' => '100_precis', 'maxOtherAttempts' => '60_estimation', 'nb_etudiants_inscrits' => '30_max'];
+    $nbKinds = ['nbEtudiantsDansGroups' => '100_precis', 'maxOtherAttempts' => '80_estimation', 'nb_etudiants_inscrits' => '30_max'];
     foreach ($nbKinds as $field => $nbKind) {
         if ($r->$field) {
 	    if ($field === 'maxOtherAttempts' && $r->maxOtherAttempts > $r->nb_etudiants_inscrits) {
@@ -229,7 +229,7 @@ function by_time_addAssign($assignResult) {
 
 function by_time_format_nb($nb, $nbKind, $nbMax) {
     $val = (1 - $nbKind / 100) * 255;
-    return "<span style='color: rgb($val, $val, $val)'>" . intval($nb) . ($nbMax && $nbKind < 80 ? "-" . intval($nbMax) : '') . "</span>";
+    return "<span style='color: rgb($val, $val, $val)'>" . intval($nb) . ($nbMax && $nbKind <= 80 ? "-" . intval($nbMax) : '') . "</span>";
 }
 
 function by_time_summarize($e) {
