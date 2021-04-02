@@ -78,6 +78,8 @@ if ( is_siteadmin()) {
 				echo html_writer::table($table);	
 				break; 
 		}	
+	} else if (isset($_GET["autosubmit"])) {
+		echo '<script>document.querySelector("form").submit()</script>';
 	}
 
 	echo $OUTPUT->box_end();
