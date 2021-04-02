@@ -7,7 +7,7 @@ require_once('locallib.php');
 require_once("$CFG->libdir/formslib.php");
 require_once('research_form.php');
 
-require_login();
+require_login(0, false);
 
 $url = new moodle_url('/local/up1_examplanning/index.php');
 $PAGE->set_url($url);
