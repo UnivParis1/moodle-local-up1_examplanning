@@ -252,7 +252,8 @@ function by_time_addApogee($list) {
 
 function by_time_format_nb($nb, $nbKind, $nbMax) {
     $val = (1 - $nbKind / 100) * 255;
-    return "<span style='color: rgb($val, $val, $val)'>" . intval($nb) . ($nbMax && $nbKind <= 80 ? "-" . intval($nbMax) : '') . "</span>";
+    $color = $nb > 1000 ? "rgb(" . intval(intval($nb) / 3000 * 255) . ", $val, $val)" : "rgb($val, $val, $val)";
+    return "<span style='color: $color'>" . intval($nb) . ($nbMax && $nbKind <= 80 ? "-" . intval($nbMax) : '') . "</span>";
 }
 
 function by_time_summarize($e) {
