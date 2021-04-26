@@ -30,13 +30,19 @@ if ( is_siteadmin()) {
 	
 	$formdata = $mform->get_data();
 	if ($formdata){
-        $resultQuiz = getQuizResult($formdata, $params);
-        by_time_addQuiz($resultQuiz);
-        $resultAssign = getAssignResult($formdata, $params);
-        by_time_addAssign($resultAssign);
-        by_time_display();
-	foreach ($resultAssign as $e) { unset($e->cm_id); }
-	foreach ($resultQuiz as $e) { unset($e->cm_id); }
+        if ($formdata->choice === 'apogee') {
+            $resultApogee = getApogeeResult($formdata);
+            by_time_addApogee($resultApogee);
+            by_time_display();
+        } else {
+            $resultQuiz = getQuizResult($formdata, $params);
+            by_time_addQuiz($resultQuiz);
+            $resultAssign = getAssignResult($formdata, $params);
+            by_time_addAssign($resultAssign);
+            by_time_display();
+            foreach ($resultAssign as $e) { unset($e->cm_id); }
+            foreach ($resultQuiz as $e) { unset($e->cm_id); }
+        }
 
 		switch ($formdata->choice) {
 			case 'assign':
@@ -75,6 +81,22 @@ if ( is_siteadmin()) {
 				);
 					
 				$table->data = $resultQuiz;
+				echo html_writer::table($table);	
+				break; 
+            case 'apogee':
+                echo "<script>function gotoApogee(cod_pes) { [...document.querySelectorAll('#resultApogee td:first-child')].find(e => e.textContent == cod_pes).scrollIntoView() }</script>";
+				$table = new html_table();
+				$table->id = "resultApogee";
+				$table->head = [
+					get_string('apogee_cod_pes', 'local_up1_examplanning'), 
+					get_string('apogee_cod_epr', 'local_up1_examplanning'),
+					get_string('name', 'local_up1_examplanning'),
+					get_string('nbUsersInGroups', 'local_up1_examplanning'),
+					get_string('timeOpen', 'local_up1_examplanning'),
+					get_string('timeclose', 'local_up1_examplanning'),
+                ];
+					
+				$table->data = $resultApogee;
 				echo html_writer::table($table);	
 				break; 
 		}	

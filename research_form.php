@@ -21,7 +21,8 @@ class local_up1_examplanning_research_form extends moodleform {
 
         $choiceArray = array(
         'assign' =>  get_string('assign', 'local_up1_examplanning'),
-        'quiz' => get_string('quiz', 'local_up1_examplanning')
+        'quiz' => get_string('quiz', 'local_up1_examplanning'),
+        'apogee' => get_string('apogee', 'local_up1_examplanning'),
         );
         $mform->addElement('select', 'choice', get_string('chooseExamType', 'local_up1_examplanning'), $choiceArray);
 

@@ -227,6 +227,29 @@ function by_time_addAssign($assignResult) {
     }
 }
 
+function by_time_addApogee($list) {
+    $j = 0;
+    foreach ($list as $r) {
+        list($date, $start) = to_date_h($r->timeopen);
+        list($date_, $end) = to_date_h($r->timeclose);
+        if ($date !== $date_ || $end - $start > 5 * 60) continue; // ignore
+    
+        $link = "javascript:gotoApogee(" . $r->cod_pes . ")";
+    
+        $dt = $date . ' ' . format_minutes($start); 
+        by_time_may_add($dt, 'start_assign', $link, $r, 1); 
+    
+        global $time_precision;
+        if ($end > $start + 2 * $time_precision) { 
+            foreach ([0, 1, 2] as $i) { 
+                $dt = $date . ' ' . format_minutes($end - $i * $time_precision); 
+                by_time_may_add($dt, 'end_assign', $link, $r, 1); 
+            } 
+        } 
+        //if ($j++ >10 ) { global $by_time; echo json_encode($by_time);  break; }
+    }
+}
+
 function by_time_format_nb($nb, $nbKind, $nbMax) {
     $val = (1 - $nbKind / 100) * 255;
     return "<span style='color: rgb($val, $val, $val)'>" . intval($nb) . ($nbMax && $nbKind <= 80 ? "-" . intval($nbMax) : '') . "</span>";
@@ -249,10 +272,11 @@ function by_time_details($cat, $l) {
        if ($cat === $one[0]) {
          $text = by_time_format_nb($one[1], $one[2]);
          $s = '';
-	 foreach ($one[3] as $link) {
-		 $s .= "<a target='_blank' href='$link'>$text</a>";
-		$text = 'M';
-	 }
+         foreach ($one[3] as $link) {
+                $target = preg_match('/^javascript:/', $link) ? "" : "target='_blank'";
+                $s .= "<a $target href='$link'>$text</a>";
+                $text = 'M';
+         }
          $details[] = $s;
        }
     }
