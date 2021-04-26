@@ -40,6 +40,13 @@ function nbUserInGroups($module_name, $instanceid) {
                     where instance= :key  
                     and m.name= :module_name';
     $availability = $DB->get_record_sql($sqlGetGroupId, ['key'=>$instanceid, 'module_name' => $module_name])->availability;
+    if ($availability) {
+        $checkId = json_decode($availability);
+        foreach ($checkId->c as $keyGroup => $valueGroup) {
+            if (isset($valueGroup->type) && !isset($valueGroup->id) && $valueGroup->type==="group")
+                $availability=null; 
+        }
+    }
     if (!$availability) {
         $sqlGetGroupId = 'select  cs.availability
                         from {course_modules} cm 
