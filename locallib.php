@@ -66,7 +66,7 @@ function nbUserInGroups($module_name, $instanceid) {
 }
 
 function getQuizResult($formdata, $params){
-	global $DB, $USER;
+        global $DB, $USER;
 	// $minCohort = is_int($formdata->minCohort)  ?$formdata->minCohort: 0;
     $sql = 'select q.id,c.id as courseid, name,
 			count(distinct(qs.page)) as nb_pages,
@@ -158,20 +158,20 @@ function by_time_may_add($dt, $cat, $link, $r, $ratio) {
     $nbKinds = ['nbEtudiantsDansGroups' => '100_precis', 'maxOtherAttempts' => '80_estimation', 'nb_etudiants_inscrits' => '30_max'];
     foreach ($nbKinds as $field => $nbKind) {
         if ($r->$field) {
-	    if ($field === 'maxOtherAttempts' && $r->maxOtherAttempts > $r->nb_etudiants_inscrits) {
-		//echo "skipping weird maxOtherAttempts<br>\n";
-		continue;
-	    }
+            if ($field === 'maxOtherAttempts' && $r->maxOtherAttempts > $r->nb_etudiants_inscrits) {
+                //echo "skipping weird maxOtherAttempts<br>\n";
+                continue;
+            }
             if ($field === 'nb_etudiants_inscrits') {
-		$index = @$e['courses'][$r->courseid];
-		if (isset($index)) {
-			$prev = &$e['l'][$index];
-			$prev[3][] = $link;
-			break;
-		} else {
+                $index = @$e['courses'][$r->courseid];
+                if (isset($index)) {
+                        $prev = &$e['l'][$index];
+                        $prev[3][] = $link;
+                        break;
+                } else {
                     $e['courses'][$r->courseid] = count($e['l']);
-		}
-	    }
+                }
+            }
             $e['l'][] = [ $cat, $r->$field * $ratio, $nbKind, [$link] ];
             break;
         }
@@ -258,8 +258,8 @@ function by_time_format_nb($nb, $nbKind, $nbMax) {
 function by_time_summarize($e) {
     $nb = $nbMax = 0;
     foreach ($e['l'] as $one) {
-	$nbMax += $one[1];
-	$nb += $one[1] * $one[2] / 100;
+        $nbMax += $one[1];
+        $nb += $one[1] * $one[2] / 100;
     }
     global $min_to_display;
     if ($nbMax < $min_to_display) return null;
@@ -319,18 +319,18 @@ EOS;
     $date_class = 'before';
     foreach ($by_time as $dt => $e) {
         if ($date_class && $dt >= $today) {
-	    $date_class = '';
+            $date_class = '';
             echo "<tr style='border: 1px dashed'></tr>";
-	}
+        }
 
         $nb = by_time_summarize($e);
         if ($nb) {
-		echo "<tr class='$date_class'><td class='$date_class'>$dt</td><td>$nb</td>" . 
-	               "<td class='debug'>" . by_time_details('start_assign', $e['l']) . "</td>" . 
-	               "<td class='debug'>" . by_time_details('end_assign', $e['l']) . "</td>" . 
-	               "<td class='debug'>" . by_time_details('start_quiz', $e['l']) . "</td>" . 
-	               "<td class='debug'>" . by_time_details('next_quiz', $e['l']) . "</td>" . 
-			"</tr>";
+                echo "<tr class='$date_class'><td class='$date_class'>$dt</td><td>$nb</td>" . 
+                       "<td class='debug'>" . by_time_details('start_assign', $e['l']) . "</td>" . 
+                       "<td class='debug'>" . by_time_details('end_assign', $e['l']) . "</td>" . 
+                       "<td class='debug'>" . by_time_details('start_quiz', $e['l']) . "</td>" . 
+                       "<td class='debug'>" . by_time_details('next_quiz', $e['l']) . "</td>" . 
+                        "</tr>";
         }
     }
     echo "</table>";
